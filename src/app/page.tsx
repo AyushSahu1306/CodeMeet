@@ -5,13 +5,18 @@ export default function Home() {
   return (
     
     <div className="m-10">
-       <SignedOut>
+       {/* <SignedOut>
             <SignInButton />
         </SignedOut>
 
         <SignedIn>
             <UserButton />
-        </SignedIn>
+        </SignedIn> */}
+         <SignInButton>
+          <Button>
+          Sign in
+          </Button>
+          </SignInButton>
     </div>
   );
 }
