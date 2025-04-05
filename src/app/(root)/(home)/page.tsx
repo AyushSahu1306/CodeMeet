@@ -8,6 +8,7 @@ import { useState } from "react";
 import { api } from "../../../../convex/_generated/api";
 import { useRouter } from "next/navigation";
 import MeetingModal from "@/components/MeetingModal";
+import LoaderUI from "@/components/LoaderUI";
 
 export default function Home() {
 
@@ -32,6 +33,8 @@ export default function Home() {
         router.push(`/${title.toLowerCase()}`);
     }
   };
+
+  if (isLoading) return <LoaderUI />;
 
   return (
     
