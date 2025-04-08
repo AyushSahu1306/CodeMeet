@@ -4,7 +4,7 @@ import ActionCard from "@/components/ActionCard";
 import { QUICK_ACTIONS } from "@/constants";
 import { useUserRole } from "@/hooks/useUserRole";
 import { useQuery } from "convex/react";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { api } from "../../../../convex/_generated/api";
 import { useRouter } from "next/navigation";
 import MeetingModal from "@/components/MeetingModal";
@@ -35,7 +35,20 @@ export default function Home() {
     }
   };
 
-  if (isLoading) return <LoaderUI />;
+ 
+
+    useEffect(() => {
+      if (!isLoading && !isInterviewer && !isCandidate) {
+        router.push("/select-role");
+      }
+    }, [isLoading, isInterviewer, isCandidate, router]);
+
+    if (isLoading) return <LoaderUI />;
+
+    // Avoid rendering content if user is being redirected
+    if (!isInterviewer && !isCandidate) {
+      return null;
+    }
 
   return (
     <div className="container max-w-7xl mx-auto p-6">

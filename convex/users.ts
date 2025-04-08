@@ -18,7 +18,7 @@ export const syncUser = mutation({
 
     return await ctx.db.insert("users", {
       ...args,
-      role: "candidate",
+      role: "pending",
     });
   },
 });
@@ -43,5 +43,22 @@ export const getUserByClerkId = query({
       .first();
 
     return user;
+  },
+});
+
+export const updateUserRole = mutation({
+  args: { role: v.union(v.literal("candidate"), v.literal("interviewer")) },
+  handler: async ({ db, auth }, { role }) => {
+    const identity = await auth.getUserIdentity();
+    if (!identity) throw new Error("Unauthorized");
+
+    const user = await db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
+      .unique();
+
+    if (!user) throw new Error("User not found");
+
+    await db.patch(user._id, { role });
   },
 });
